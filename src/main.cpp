@@ -16,7 +16,7 @@ int main() {
     //if (input == "exit")
     if (input.starts_with("exit"))
     {
-      break;
+      return 0;
     }
     else{
     std::cout << input << ": command not found" << std::endl;
