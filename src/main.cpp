@@ -6,10 +6,19 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  // Uncomment this block to pass the first stage
-  std::cout << "$ ";
-
   std::string input;
-  std::getline(std::cin, input);
-  std::cout << input << ": command not found" << std::endl;
+
+  while (true)
+  {
+    // Uncomment this block to pass the first stage
+    std::cout << "$ ";
+    std::getline(std::cin, input);
+    if (input == "exit")
+    {
+      break;
+    }
+    else{
+    std::cout << input << ": command not found" << std::endl;
+    }
+  }
 }
