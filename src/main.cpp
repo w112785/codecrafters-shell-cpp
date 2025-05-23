@@ -13,7 +13,8 @@ int main() {
     // Uncomment this block to pass the first stage
     std::cout << "$ ";
     std::getline(std::cin, input);
-    if (input == "exit")
+    //if (input == "exit")
+    if (input.starts_with("exit"))
     {
       break;
     }
