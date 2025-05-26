@@ -17,7 +17,9 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter = ' 
 bool SearchDirectorys(const std::vector<std::string> &paths, std::string& file){
   std::string checkfile;
   for (std::string path: paths){
-    checkfile = path + file;
+    // On windows there is a trailing dir seperator, On linux there is not so it was looking for cat with /bincat and not /bin/cat.
+    // this seems to work both on windows and linux. So leaving it in.
+    checkfile = path + "/" + file;
     if (std::filesystem::exists(checkfile)){
       std::cout << file << " is " << path << "\n";
       return true;
