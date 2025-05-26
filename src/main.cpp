@@ -4,8 +4,6 @@
 #include <vector>
 #include <filesystem>
 
-std::vector<std::string> builtins;
-
 std::vector<std::string> SplitString(const std::string& str, char delimiter = ' ') {
   std::istringstream iss(str);
   std::vector<std::string> tokens;
@@ -17,7 +15,14 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter = ' 
 }
 
 bool SearchDirectorys(const std::vector<std::string> &paths, std::string& file){
-  
+  std::string checkfile;
+  for (std::string path: paths){
+    checkfile = path + file;
+    if (std::filesystem::exists(checkfile)){
+      std::cout << file << " is " << path << "\n";
+      return true;
+    }
+  }
   return false;
 }
 
@@ -54,8 +59,9 @@ int main() {
 #elif defined(_POSIX_VERSION)
           path = SplitString(std::getenv("PATH"), ':');
 #endif
-
-          std::cout << command[1] << ": not found" << std::endl;
+          if (!SearchDirectorys(path, command[1])) {
+            std::cout << command[1] << ": not found" << std::endl;
+          }
         }
       }
       else{
