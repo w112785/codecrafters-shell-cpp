@@ -14,14 +14,14 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter = ' 
   return tokens;
 }
 
-bool SearchDirectorys(const std::vector<std::string> &paths, std::string& file){
+bool SearchDirectorys(const std::vector<std::string> &paths, const std::string& file){
   std::string checkfile;
   for (std::string path: paths){
     // On windows there is a trailing dir seperator, On linux there is not so it was looking for cat with /bincat and not /bin/cat.
     // this seems to work both on windows and linux. So leaving it in.
     checkfile = path + "/" + file;
     if (std::filesystem::exists(checkfile)){
-      std::cout << file << " is " << path << "\n";
+      std::cout << file << " is " << checkfile << "\n";
       return true;
     }
   }
@@ -55,6 +55,7 @@ int main() {
         }
         else {
           std::vector<std::string> path;
+          std::string typeresult;
           // becuase I run windows and Windows and linux run different path seperators
 #ifdef _WIN32
           path = SplitString(std::getenv("PATH"), ';');
