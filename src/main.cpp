@@ -56,7 +56,7 @@ int main() {
           // becuase I run windows and Windows and linux run different path seperators
 #ifdef _WIN32
           path = SplitString(std::getenv("PATH"), ';');
-#elif defined(_POSIX_VERSION)
+#else
           path = SplitString(std::getenv("PATH"), ':');
 #endif
           if (!SearchDirectorys(path, command[1])) {
