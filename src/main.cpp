@@ -14,14 +14,14 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter = ' 
   return tokens;
 }
 
-bool SearchDirectorys(const std::vector<std::string> &paths, const std::string& file){
+bool SearchDirectorys(const std::vector<std::string> &paths, const std::string& file, std::string &outstr){
   std::string checkfile;
   for (std::string path: paths){
     // On windows there is a trailing dir seperator, On linux there is not so it was looking for cat with /bincat and not /bin/cat.
     // this seems to work both on windows and linux. So leaving it in.
     checkfile = path + "/" + file;
     if (std::filesystem::exists(checkfile)){
-      std::cout << file << " is " << checkfile << "\n";
+      outstr = checkfile;
       return true;
     }
   }
@@ -35,6 +35,12 @@ int main() {
 
   std::string input;
   std::vector<std::string> command;
+  std::vector<std::string> path;
+#ifdef _WIN32
+  path = SplitString(std::getenv("PATH"), ';');
+#else
+  path = SplitString(std::getenv("PATH"), ':');
+#endif
 
   while (true)
   {
@@ -54,16 +60,13 @@ int main() {
           std::cout << command[1] << " is a shell builtin" << std::endl;
         }
         else {
-          std::vector<std::string> path;
           std::string typeresult;
           // becuase I run windows and Windows and linux run different path seperators
-#ifdef _WIN32
-          path = SplitString(std::getenv("PATH"), ';');
-#else
-          path = SplitString(std::getenv("PATH"), ':');
-#endif
-          if (!SearchDirectorys(path, command[1])) {
+          if (!SearchDirectorys(path, command[1], typeresult)) {
             std::cout << command[1] << ": not found" << std::endl;
+          }
+          else {
+            std::cout << command[1] << " is " << typeresult << "\n";
           }
         }
       }
@@ -72,6 +75,12 @@ int main() {
       }
     }
     else{
+      std::string exeCommand;
+      if (SearchDirectorys(path, command[0], exeCommand)){
+        system(input.c_str());
+        continue;
+      }
+
       std::cout << input << ": command not found" << std::endl;
     }
   }
