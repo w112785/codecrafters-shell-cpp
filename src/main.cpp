@@ -4,6 +4,14 @@
 #include <vector>
 #include <filesystem>
 
+// This was added to keep things better organized. 
+// As I continue this challenge I am finding I need to keep this code scalable.
+struct command { // TODO: Implement in the code and reference off this not hardcoded strings
+  std::string name;
+  int params;
+  std::string usage;
+};
+
 std::vector<std::string> SplitString(const std::string& str, char delimiter = ' ') {
   std::istringstream iss(str);
   std::vector<std::string> tokens;
@@ -36,6 +44,7 @@ int main() {
   std::string input;
   std::vector<std::string> command;
   std::vector<std::string> path;
+  // becuase I run windows and Windows and linux run different path seperators
 #ifdef _WIN32
   path = SplitString(std::getenv("PATH"), ';');
 #else
@@ -54,6 +63,9 @@ int main() {
     else if (command[0] == "echo"){
       std::cout << input.substr(5) << std::endl;
     }
+    else if (command[0] == "pwd"){
+      std:: cout << std::filesystem::current_path() << "\n";
+    }
     else if (command[0] == "type") {
       if (command.size() > 1) {
         if (command[1] == "echo" || command[1] == "exit" || command[1] == "type") {
@@ -61,7 +73,6 @@ int main() {
         }
         else {
           std::string typeresult;
-          // becuase I run windows and Windows and linux run different path seperators
           if (!SearchDirectorys(path, command[1], typeresult)) {
             std::cout << command[1] << ": not found" << std::endl;
           }
