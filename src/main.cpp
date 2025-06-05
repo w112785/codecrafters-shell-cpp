@@ -68,7 +68,7 @@ int main() {
     }
     else if (command[0] == "type") {
       if (command.size() > 1) {
-        if (command[1] == "echo" || command[1] == "exit" || command[1] == "type") {
+        if (command[1] == "echo" || command[1] == "exit" || command[1] == "type" || command[1] == "pwd") {
           std::cout << command[1] << " is a shell builtin" << std::endl;
         }
         else {
