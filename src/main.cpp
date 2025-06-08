@@ -80,8 +80,13 @@ bool CmdEcho(std::vector<std::string> cmd){
 }
 
 bool CmdCd(std::vector<std::string> cmd){
-
-  return false;
+  if (std::filesystem::exists(cmd[1])){
+    std::filesystem::current_path(cmd[1]);
+  }
+  else{
+    std::cout << "cd: " << cmd[1] << ": No such file or directory" << std::endl;
+  }
+  return true;
 }
 
 bool CmdExit(std::vector<std::string> cmd){return false;} //was created but after rethough shouild never be called.
