@@ -19,12 +19,12 @@ Well I am coding this on windows and running it on windows. CodeCrafters will bu
 Leading me to need to work around some differences in the systems. Namely the difference in the way Windows and Linux handle the PATH variable. 
 
 # POSIX Shell Development To-Do List
-## Copied this todo list from ["Sploosh"](https://github.com/adamadair/sploosh)
-## Some will be implemented as part of the CodeCrafters Challenge
+Copied this todo list from ["Sploosh"](https://github.com/adamadair/sploosh)
+Some will be implemented as part of the CodeCrafters Challenge
 
 ## Core Features
-- [ ] Implement command parsing and execution
-- [ ] Support shell built-ins (`cd`, `exit`, `echo`, etc.)
+- [X] Implement command parsing and execution
+- [ ] *in progress* Support shell built-ins (`cd`, `exit`, `echo`, etc.)
 - [ ] Handle background execution with `&`
 - [ ] Implement pipelines using `|`
 - [ ] Implement I/O redirection (`>`, `<`, `>>`, `2>`, `2>>`)
