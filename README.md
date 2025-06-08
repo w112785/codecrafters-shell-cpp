@@ -24,7 +24,7 @@ Some will be implemented as part of the CodeCrafters Challenge
 
 ## Core Features
 - [X] Implement command parsing and execution
-- [ ] *in progress* Support shell built-ins (`cd`, `exit`, `echo`, etc.)
+- [X] Support shell built-ins (`cd`, `exit`, `echo`, etc.)
 - [ ] Handle background execution with `&`
 - [ ] Implement pipelines using `|`
 - [ ] Implement I/O redirection (`>`, `<`, `>>`, `2>`, `2>>`)

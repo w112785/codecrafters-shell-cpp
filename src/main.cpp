@@ -83,6 +83,9 @@ bool CmdCd(std::vector<std::string> cmd){
   if (std::filesystem::exists(cmd[1])){
     std::filesystem::current_path(cmd[1]);
   }
+  else if (cmd[1] == "~"){
+    std::filesystem::current_path(std::getenv("HOME"));
+  }
   else{
     std::cout << "cd: " << cmd[1] << ": No such file or directory" << std::endl;
   }
