@@ -5,12 +5,40 @@
 #include <filesystem>
 
 
-std::vector<std::string> SplitString(const std::string& str, char delimiter = ' ') {
+std::vector<std::string> SplitString(const std::string& str, char delimiter, bool searchForQuotes = false) {
   std::istringstream iss(str);
   std::vector<std::string> tokens;
   std::string token;
-  while (std::getline(iss, token, delimiter)) {
-    tokens.push_back(token);
+  if (searchForQuotes){
+    bool inSingleQuotes = false;
+
+    for (size_t i = 0; i < str.length(); i++) {
+      char c = str[i];
+
+      if (c == '\'') {
+        if (!inSingleQuotes) {
+          inSingleQuotes = true;
+        } else {
+          inSingleQuotes = false;
+        }
+      } else if (c == delimiter && !inSingleQuotes) {
+        if (!token.empty()) {
+          tokens.push_back(token);
+          token.clear();
+        }
+      } else {
+        token += c;
+      }
+    }
+    if (!token.empty()) {
+      tokens.push_back(token);
+      token.clear();
+    }
+  } else {
+    while (std::getline(iss, token, delimiter)) {
+      tokens.push_back(token);
+      token.clear();
+    }
   }
   return tokens;
 }
@@ -29,17 +57,17 @@ bool SearchDirectorys(const std::vector<std::string>& paths, const std::string& 
   return false;
 }
 
-std::vector<std::string> path;
-
 // This was added to keep things better organized. 
 // As I continue this challenge I am finding I need to keep this code scalable.
-struct BuiltinCommand { // TODO: Implement in the code and reference off this not hardcoded strings
+struct BuiltinCommand { 
   std::string name;
   std::string usage;
   bool (*exeCommand)(std::vector<std::string> cmd);
 };
 
 std::vector<BuiltinCommand> builtins;
+std::vector<std::string> path;
+std::string input;
 
 bool pwd(std::vector<std::string> cmd){
   std::cout << std::filesystem::current_path().string() << "\n";
@@ -100,7 +128,6 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  std::string input;
   std::vector<std::string> command;
   bool command_found;
   // becuase I run windows and Windows and linux run different path seperators
@@ -120,7 +147,8 @@ int main() {
     std::cout << "$ ";
     std::getline(std::cin, input);
 
-    command = SplitString(input);
+    command_found = false;
+    command = SplitString(input, ' ', true);
 
     for (BuiltinCommand builtincmd: builtins) {
       if (command[0] == builtincmd.name) {
