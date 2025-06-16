@@ -4,6 +4,7 @@
 #include <vector>
 #include <filesystem>
 
+#include "Modes.hpp"
 
 std::vector<std::string> SplitString(const std::string& str, char delimiter, bool searchForQuotes = false) {
   std::istringstream iss(str);
