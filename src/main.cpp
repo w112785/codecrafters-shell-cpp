@@ -15,6 +15,7 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
   if (tokenize) {
     for (size_t i = 0; i < str.length(); i++) {
       char c = str[i];
+      bool modechanged = false;
       if (escaped) { // previous char was '\'
         token += c;
         escaped = false;
@@ -25,21 +26,25 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
       case Modes::NormalMode:
         if (c == '\'') {
           mode = Modes::SingleQuote;
+          modechanged = true;
         }
         if (c == '"') {
           mode = Modes::DoubleQuote;
+          modechanged = true;
         }
         break;
 
       case Modes::SingleQuote:
         if (c == '\'') {
           mode = Modes::NormalMode;
+          modechanged = true;
         }
         break;
 
       case Modes::DoubleQuote:
         if (c == '"' && !escaped) {
           mode = Modes::NormalMode;
+          modechanged = true;
         }
         break;
       }
@@ -48,7 +53,7 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
           tokens.push_back(token);
           token.clear();
         }
-      } else {
+      } else if (!modechanged) {
         token += c;
       }
     }
@@ -186,7 +191,7 @@ int main() {
             } catch (std::out_of_range) {
               return 1;
             }
-          }
+          } else { return 0; }
         }
         if (!builtincmd.exeCommand(command)) {
           std::cout << builtincmd.usage << std::endl;
