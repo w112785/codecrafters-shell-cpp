@@ -20,6 +20,12 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
 
       switch (mode) {
       case Modes::NormalMode:
+        if (escaped) { // previous char was '\'
+          token += c;
+
+          escaped = false;
+          continue;
+        }
         if (c == '\'') {
           mode = Modes::SingleQuote;
           modechanged = true;
@@ -28,11 +34,6 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
           modechanged = true;
         } else if (c == '\\') {
           escaped = true;
-          continue;
-        }
-        if (escaped) { // previous char was '\'
-          token += c;
-          escaped = false;
           continue;
         }
         break;
