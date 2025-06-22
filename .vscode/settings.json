@@ -4,5 +4,6 @@
         "string": "cpp",
         "istream": "cpp",
         "xstring": "cpp"
-    }
+    },
+    "C_Cpp.default.compilerPath": "cl.exe"
 }

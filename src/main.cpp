@@ -27,10 +27,12 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
         if (c == '\'') {
           mode = Modes::SingleQuote;
           modechanged = true;
-        }
-        if (c == '"') {
+        } else if (c == '"') {
           mode = Modes::DoubleQuote;
           modechanged = true;
+        } else if (c == '\\'){
+          escaped = true;
+          continue;
         }
         break;
 
@@ -47,6 +49,10 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
           modechanged = true;
         }
         break;
+      }
+      if (escaped && std::isspace(c)){
+        token += c;
+        escaped = false;
       }
       if (c == delimiter && mode == Modes::NormalMode) {
         if (!token.empty()) {
