@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <filesystem>
+#include <format>
 
 #include "Modes.hpp"
 
@@ -16,11 +17,6 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
     for (size_t i = 0; i < str.length(); i++) {
       char c = str[i];
       bool modechanged = false;
-      if (escaped) { // previous char was '\'
-        token += c;
-        escaped = false;
-        continue;
-      }
 
       switch (mode) {
       case Modes::NormalMode:
@@ -30,8 +26,13 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
         } else if (c == '"') {
           mode = Modes::DoubleQuote;
           modechanged = true;
-        } else if (c == '\\'){
+        } else if (c == '\\') {
           escaped = true;
+          continue;
+        }
+        if (escaped) { // previous char was '\'
+          token += c;
+          escaped = false;
           continue;
         }
         break;
@@ -44,13 +45,28 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
         break;
 
       case Modes::DoubleQuote:
+        if (escaped) {
+          if (c == '\\' || c == '"') {
+            token += c;
+            escaped = false;
+          } else {
+            token += std::format("\\{}", c);
+            escaped = false;
+          }
+          continue;
+        }
+
         if (c == '"' && !escaped) {
           mode = Modes::NormalMode;
           modechanged = true;
+        } else if (c == '\\') {
+          escaped = true;
+          continue;
         }
+
         break;
       }
-      if (escaped && std::isspace(c)){
+      if (escaped && std::isspace(c)) {
         token += c;
         escaped = false;
       }
