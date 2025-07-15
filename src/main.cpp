@@ -22,7 +22,6 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter, boo
       case Modes::NormalMode:
         if (escaped) { // previous char was '\'
           token += c;
-
           escaped = false;
           continue;
         }
@@ -167,7 +166,7 @@ bool CmdCd(std::vector<std::string> cmd) {
   return true;
 }
 
-bool CmdExit(std::vector<std::string> cmd) { return false; } //was created but after rethough shouild never be called.
+bool CmdExit(std::vector<std::string> cmd) { return false; } //was created but after rethought shouild never be called.
 // keeping to create a pointer for the exit call
 
 int main() {
@@ -228,7 +227,7 @@ int main() {
         system(input.c_str());
         continue;
       }
-      std::cout << input << ": command not found" << std::endl;
+      std::cout << command[0] << ": command not found" << std::endl;
     }
   }
 }
